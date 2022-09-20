@@ -1,0 +1,32 @@
+.next-wrapper {
+    position: absolute;
+    top: 46%;
+    right: 0;
+    display: none;
+}
+
+.next-icon {
+    transition: all 0.3s ease;
+    font-size: 60px;
+    background-color: #333;
+    width: 80%;
+    color: #fff;
+    opacity: 0.5;
+    border-radius: 5px 0 0 20px;
+    box-shadow: -1px 0px 8px 0px rgb(0 0 0 / 80%);
+}
+
+.show {
+    display: block;
+}
+
+.next-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.next-container:hover .next-icon{
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    box-shadow: -1px 0px 8px 1px rgb(0 0 0 / 80%);
+}
