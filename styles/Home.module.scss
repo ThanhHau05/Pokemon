@@ -16,7 +16,7 @@
 
 .item-pokemon {
   position: relative;
-  height: 132px;
+  height: 140px;
    width: 100px;
     background-color: #fbfbfbe6;
     border-radius: 14px;
@@ -32,6 +32,7 @@
     &:hover img {
       transform: scale(1.5);
     }
+    &:hover small,
     &:hover span {
       transition: all 0.4s ease;
       color: #fff;
@@ -47,7 +48,7 @@
 .item-pokemon img {
   width: 100%;
   transition: all 0.4s ease-in-out;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .pokemon-container {
@@ -60,7 +61,8 @@
     position: absolute;
     width: 100%;
     transition: all 0.4s ease-in-out;
-
+    display: flex;
+    flex-direction: column;
 }
 
 .pokemon-title span {
@@ -76,7 +78,7 @@
 }
 
 .pokeball-loading-container {
-  height: 85vh;
+  height: 75vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -184,4 +186,22 @@
     &:hover {
       color: #144f89;
     }
+}
+
+.pokemon-title small {
+  font-weight: bold;
+  color: #000;
+}
+
+.see-more-container {
+  display: block;
+  text-align: center;
+  margin: 30px 0 40px;
+}
+
+.see-more {
+  padding: 7px 13px 9px;
+  background-color: #05051d78;
+  border-radius: 6px;
+  cursor: pointer;
 }

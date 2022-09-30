@@ -39,10 +39,11 @@ interface ItemPokemon {
   };
 }
 
-function InfoPokemon({ nextpokemon }) {
+function InfoPokemon({ nextpokemon, checkpokemon, itempokemon }) {
   const [itemslider, setItemSlider] = useState<ItemPokemon[]>([]);
   const [showarrow, setShowArrow] = useState(false);
   useEffect(() => {
+    setItemSlider([]);
     const _getnextpokemon = async () => {
       const res = await axios.get(nextpokemon);
       res.data.results?.forEach(async (element) => {
@@ -129,14 +130,74 @@ function InfoPokemon({ nextpokemon }) {
     prevArrow: <SamplePrevArrow onClick={undefined} isHighLight={showarrow} />,
   };
   return (
-    <div
-      className={cx("container")}
-      onMouseOver={_handleShowArrow}
-      onMouseOut={_handleHideArrow}
-    >
-      <Slider {...settings} {...settingarrow}>
-        {_handleRenderItem()}
-      </Slider>
+    <div className={cx("wrapper")}>
+      {!checkpokemon ? (
+        <div
+          className={cx("container")}
+          onMouseOver={_handleShowArrow}
+          onMouseOut={_handleHideArrow}
+        >
+          <Slider {...settings} {...settingarrow}>
+            {_handleRenderItem()}
+          </Slider>
+        </div>
+      ) : (
+        <div className={cx("container", "pokemon-container")}>
+          <h2>{itempokemon.name}</h2>
+          <div className={cx("pokemoninfo-img")}>
+            <img
+              src={itempokemon.sprites.other["official-artwork"].front_default}
+              alt={itempokemon.name}
+            />
+          </div>
+          <div className={cx("hw-pokemon")}>
+            <span className={cx("h-pokemon")}>
+              Height: <span>{Number(itempokemon.height) / 10}m</span>
+            </span>
+            <span className={cx("w-pokemon")}>
+              Weight: <span>{Number(itempokemon.weight) / 10}kg</span>
+            </span>
+          </div>
+          <div className={cx("pokemon-type-container")}>
+            <span className={cx("pokemon-type-title")}>Types:</span>
+            <div className={cx("pokemon-types-type")}>
+              {itempokemon.types.map((items) => (
+                <span
+                  key={items.slot}
+                  className={cx("type_" + items.type.name)}
+                >
+                  {items.type.name}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className={cx("pokemon-abilities-container")}>
+            <span className={cx("pokemon-abilities-title")}>Abilities:</span>
+            <div className={cx("pokemon-abilities")}>
+              {itempokemon.abilities.map((items) => (
+                <span key={items.slot} className={cx("abilities")}>
+                  {items.ability.name}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className={cx("pokemon-stats-container")}>
+            <span className={cx("pokemon-stats-title")}>Stats</span>
+            <div className={cx("pokemon-stats")}>
+              {itempokemon.stats.map((items, index) => (
+                <div key={index} className={cx("stat_" + items.stat.name)}>
+                  <span className={cx("stat-" + items.stat.name + "-title")}>
+                    {items.stat.name}
+                  </span>
+                  <span className={cx("stat-base_stat")}>
+                    {items.base_stat}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
