@@ -23,25 +23,28 @@ export default function Home() {
   const [itempokemon, setItemPokemon] = useState<ItemPokemon[]>([]);
   const [itempokemonsearch, setItemPokemonSearch] = useState<ItemPokemon>();
   const [nexturl, setNextUrl] = useState("");
+  const [numberpokemon, setNumberPokemon] = useState(48);
   const [valueinput, setValueInput] = useState("");
   const [valuesearch, setValueSearch] = useState("");
+  const [iteminfopokemon, setItemInfoPokemon] = useState("");
   const [searchloading, setSearchLoading] = useState(false);
+  const [checkpokemon, setCheckPokemon] = useState(false);
   useEffect(() => {
     setItemPokemon([]);
     const _getpokemon = async () => {
       const res = await axios.get(
-        "https://pokeapi.co/api/v2/pokemon?limit=48&offset=0"
+        `https://pokeapi.co/api/v2/pokemon?limit=${numberpokemon}&offset=0`
       );
-      setNextUrl(res.data.next);
-      res.data.results.forEach(async (element) => {
+      await setNextUrl(res.data.next);
+      await res.data.results.forEach(async (element) => {
         const poke = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/${element.name}`
         );
-        setItemPokemon((prev) => [...prev, poke.data]);
+        await setItemPokemon((prev) => [...prev, poke.data]);
       });
     };
     _getpokemon();
-  }, []);
+  }, [numberpokemon]);
 
   useEffect(() => {
     if (valueinput !== "") {
@@ -145,7 +148,7 @@ export default function Home() {
 
   const _handleRenderItem = () => {
     if (valueinput === "") {
-      if (itempokemon.length < 48) {
+      if (itempokemon.length < numberpokemon) {
         return (
           <div className={cx("pokeball-loading-container")}>
             <div className={cx("pokeball-loading")}>
@@ -156,8 +159,16 @@ export default function Home() {
       } else {
         return itempokemon.map((item) => (
           <div className={cx("item-pokemon-container")} key={item.id}>
-            <div className={cx("item-pokemon")}>
+            <div
+              className={cx("item-pokemon")}
+              onClick={() => _handleGetItemInfoPokemon(item)}
+            >
               <div className={cx("pokemon-title")}>
+                {Number(item.id) >= 100 ? (
+                  <small>#{item.id}</small>
+                ) : (
+                  <small>#0{item.id}</small>
+                )}
                 <span>{item.name}</span>
               </div>
               <img
@@ -202,7 +213,10 @@ export default function Home() {
               className={cx("item-pokemon-container")}
               key={itempokemonsearch.id}
             >
-              <div className={cx("item-pokemon")}>
+              <div
+                className={cx("item-pokemon")}
+                onClick={() => _handleGetItemInfoPokemon(itempokemonsearch)}
+              >
                 <div className={cx("pokemon-title")}>
                   <span>{itempokemonsearch.name}</span>
                 </div>
@@ -219,6 +233,11 @@ export default function Home() {
         }
       }
     }
+  };
+
+  const _handleGetItemInfoPokemon = (e) => {
+    setItemInfoPokemon(e);
+    setCheckPokemon(true);
   };
 
   return (
@@ -247,8 +266,20 @@ export default function Home() {
           </div>
         </div>
         <div className={cx("pokemon-container")}>{_handleRenderItem()}</div>
+        <div id="see-more" className={cx("see-more-container")}>
+          <span
+            className={cx("see-more")}
+            onClick={() => setNumberPokemon(numberpokemon + 48)}
+          >
+            See More
+          </span>
+        </div>
       </div>
-      <InfoPokemon nextpokemon={nexturl} />
+      <InfoPokemon
+        nextpokemon={nexturl}
+        checkpokemon={checkpokemon}
+        itempokemon={iteminfopokemon}
+      />
     </div>
   );
 }
