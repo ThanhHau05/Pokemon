@@ -5,7 +5,7 @@ const cx = classNames.bind(styles);
 
 function SampleNextArrow({ onClick, isHighLight }) {
   return (
-    <div className={cx("next-wrapper", isHighLight && "show")}>
+    <div className={cx("next-wrapper", isHighLight && "show", "a")}>
       <div className={cx("next-container")} onClick={onClick}>
         <MdNavigateNext className={cx("next-icon")} />
       </div>
